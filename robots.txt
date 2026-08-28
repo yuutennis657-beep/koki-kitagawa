@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://yuutennis657-beep.github.io/koki-kitagawa/sitemap.xml
