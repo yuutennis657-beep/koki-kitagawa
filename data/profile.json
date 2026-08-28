@@ -1,0 +1,36 @@
+{
+  "name": "北川弘喜",
+  "nameEn": "Koki Kitagawa",
+  "roles": ["ギタリスト", "作曲", "編曲"],
+  "headline": "作る人であり、弾く人。",
+  "headlineStatus": "要確認: docs/CONTENT.md の A/B/C 案から本人が選ぶ",
+  "highlights": ["CDTV 出演", "SUMMER SONIC 2023", "B-PROJECT 楽曲提供"],
+  "highlightsStatus": "要確認: 記載可否",
+  "bio": [
+    "曲を書く人と、曲を鳴らす人は、たいてい別々にいる。",
+    "北川弘喜はその両方に立つ。B-PROJECT、星名美怜、Bunny La Crew への楽曲提供で曲そのものを立ち上げ、SUMMER SONIC やイナズマロックフェスのステージではサポートギタリストとして音を鳴らす。CDTV では地上波のバックに立った。",
+    "舞台の仕事も持つ。『あんさんぶるスターズ！オン・ステージ』では劇中のギターを入れ、演技指導まで担当した。楽器を弾くだけでは終わらない現場を、いくつも通っている。",
+    "専門学校と音楽教室で講師を務め、個人レッスンでは初心者からプロまでを見る。教えることと作ることが、同じ場所でつながっている。"
+  ],
+  "bioStatus": "要確認: 事実誤認が無いか本人確認",
+  "career": [
+    { "label": "専門学校 講師", "detail": "要確認: 学校名を出せるか" },
+    { "label": "音楽教室 講師", "detail": "要確認: 教室名を出せるか" },
+    { "label": "個人レッスン", "detail": "初心者〜プロフェッショナル" }
+  ],
+  "lesson": {
+    "frequency": "月2回〜",
+    "price": "1レッスン 1時間 8,000円",
+    "target": "初心者〜プロフェッショナル"
+  },
+  "links": {
+    "spotify": "https://open.spotify.com/playlist/4vF3Pt0G9U2wvwlmTueu7q",
+    "youtube": "https://www.youtube.com/@KokiKitagawa",
+    "instagram": "https://www.instagram.com/kitagawa_kouki/",
+    "x": "https://x.com/Gt_koki_"
+  },
+  "email": null,
+  "emailStatus": "要確認: 公開してよいメールアドレス",
+  "siteUrl": "https://yuutennis657-beep.github.io/koki-kitagawa/",
+  "siteUrlStatus": "GitHub Pages の初期URL。独自ドメインを取るなら差し替えて再ビルドする"
+}

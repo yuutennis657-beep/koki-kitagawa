@@ -1,0 +1,25 @@
+[
+  { "title": "Memory", "artist": "B-PROJECT", "category": "compose", "roles": ["要確認"], "year": null, "featured": true, "jacket": null, "note": "" },
+  { "title": "Now Feel Saddest!?", "artist": "星名美怜", "category": "compose", "roles": ["要確認"], "year": null, "featured": true, "jacket": null, "note": "" },
+  { "title": "恋のエビデンス", "artist": "Bunny La Crew", "category": "compose", "roles": ["要確認"], "year": null, "featured": true, "jacket": null, "note": "" },
+  { "title": "FLAME", "artist": "Jams Collection", "category": "compose", "roles": ["要確認"], "year": null, "featured": true, "jacket": null, "note": "" },
+  { "title": "視聴覚Fighter", "artist": "Pastel closet", "category": "compose", "roles": ["要確認"], "year": null, "featured": true, "jacket": null, "note": "" },
+  { "title": "恋のスピード違反", "artist": "Bunny La Crew", "category": "compose", "roles": ["要確認"], "year": null, "featured": true, "jacket": null, "note": "" },
+  { "title": "夏ときめいちゃいマッスル", "artist": "Jams Collection", "category": "compose", "roles": ["要確認"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "トキメキ NEW WORLD", "artist": "Jams Collection", "category": "compose", "roles": ["要確認"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "ドキドキシャッターチャンス", "artist": "Jams Collection", "category": "compose", "roles": ["要確認"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "鬼KawaWe!!!", "artist": "Pastel closet", "category": "compose", "roles": ["要確認"], "year": null, "featured": false, "jacket": null, "note": "" },
+
+  { "title": "Goin Goin", "artist": "Chico", "category": "guitar", "roles": ["ギター"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "Sense of Wonder", "artist": "寿美菜子", "category": "guitar", "roles": ["ギター"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "Startin'", "artist": "Dream Shizuka", "category": "guitar", "roles": ["ギター"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "エピローグ", "artist": "シユイ", "category": "guitar", "roles": ["ギター"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "UUUM ONE PIECE MUUUSIC COVER ALBUM", "artist": "UUUM", "category": "guitar", "roles": ["ギター"], "year": null, "featured": false, "jacket": null, "note": "収録3曲に参加" },
+
+  { "title": "ハレンチ", "artist": "春猿火", "category": "karaoke", "roles": ["カラオケ音源制作"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "水星", "artist": "春猿火", "category": "karaoke", "roles": ["カラオケ音源制作"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "名前のない怪物", "artist": "春猿火", "category": "karaoke", "roles": ["カラオケ音源制作"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "Wonderland", "artist": "春猿火", "category": "karaoke", "roles": ["カラオケ音源制作"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "カワキヲアメク", "artist": "春猿火", "category": "karaoke", "roles": ["カラオケ音源制作"], "year": null, "featured": false, "jacket": null, "note": "" },
+  { "title": "何様", "artist": "春猿火", "category": "karaoke", "roles": ["カラオケ音源制作"], "year": null, "featured": false, "jacket": null, "note": "" }
+]
