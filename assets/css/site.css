@@ -1,0 +1,225 @@
+/* ============================================================
+   site.css — このページ固有の組み方だけを置く。
+   色・書体・字間・余白・イージングは kk-design-system.css の
+   変数だけを使う。新しいトークンをここで作らない。
+   ============================================================ */
+
+/* JavaScript が無い／読めないときは、ふわっと出す仕掛けを最初から解いておく。
+   （head の1行スクリプトが html に .js を付ける。付かなければこの行が効く） */
+html:not(.js) .reveal { opacity: 1; transform: none; }
+
+/* キーボードで辿ったとき、どこにいるかが見える（灯り色の枠） */
+:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
+
+/* ナビで飛んだとき、見出しが上の固定ロゴに隠れないようにする */
+main section[id], .site-footer { scroll-margin-top: calc(var(--h-header) + var(--sp-3)); }
+
+/* width/height 属性を書いた <img> が縦に伸びないようにする（レイアウトシフト防止と両立させる） */
+img { height: auto; }
+
+/* 下端の固定ナビ（900px以下）に本文が隠れないようにする。
+   8項目が横スクロール無しで収まるよう、狭い画面では字を小さくして間を詰める */
+@media (max-width: 900px) {
+  /* --h-navbar は下端ナビの高さ。--h-header と同じ性格の寸法で、色や書体の追加ではない */
+  :root { --h-navbar: 74px; }
+  body { padding-bottom: var(--h-navbar); }
+  .site-nav { gap: var(--sp-2); padding-inline: var(--sp-2); }
+  .site-nav a { font-size: var(--fs-caption); letter-spacing: .06em; padding-block: var(--sp-2); }
+}
+
+/* 指で押す的を 44px 以上にする（見た目の位置は変えない） */
+.social a { padding: var(--sp-2); margin: calc(var(--sp-2) * -1); }
+
+/* 固定ロゴの下を本文が通るので、背景と同じ色の暗幕を薄くかける
+   （新しい色ではなく --c-bg #0C1211 の透明度違い。ヒーローの暗幕と同じ考え方） */
+.site-header::before {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; z-index: -1;
+  height: calc(var(--h-header) + var(--sp-5));
+  background: linear-gradient(180deg, rgba(12,18,17,.95) 0%, rgba(12,18,17,.78) 55%, rgba(12,18,17,0) 100%);
+}
+.social a { opacity: .9; }
+.site-header { padding-top: var(--sp-3); }
+
+/* ------------------------------------------------------------
+   HERO
+   ------------------------------------------------------------ */
+.hero__copy { position: absolute; inset: 0; width: auto; max-width: none; margin: 0; }
+/* 左の固定ナビが写真の明るい部分に重なっても読めるように、端だけ暗くする
+   （ヒーローの暗幕と同じ rgba(12,18,17,…)。新しい色は足していない） */
+.hero::before {
+  content: ""; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(90deg, rgba(12,18,17,.85) 0%, rgba(12,18,17,.35) 18%, rgba(12,18,17,0) 34%);
+}
+/* 写真は画面の端まで見せる。左の固定ナビぶんは .hero__copy の内側で空ける */
+@media (min-width: 901px) {
+  .hero { margin-left: calc(var(--w-nav) * -1); }
+  .hero__copy { left: var(--w-nav); }   /* 絶対配置の基準そのものをナビの右へ寄せる */
+}
+.hero__vert { position: absolute; margin: 0; }
+.hero__vert--main { right: var(--gutter); top: calc(var(--h-header) + var(--sp-5)); }
+.hero__vert--sub  { left: var(--gutter); bottom: var(--sp-8); font-size: var(--fs-vert); }
+.hero__bottom {
+  position: absolute; left: 50%; transform: translateX(-50%); bottom: var(--sp-4);
+  width: calc(100% - var(--gutter) * 2); max-width: var(--w-content);
+  display: grid; justify-items: center; gap: var(--sp-3);
+}
+.hero__highlights {
+  margin: 0; text-align: center;
+  font-family: var(--f-en); font-size: var(--fs-label); letter-spacing: var(--ls-label);
+  color: var(--c-ink);
+}
+.hero__scroll {
+  font-family: var(--f-en); font-size: var(--fs-caption); letter-spacing: var(--ls-label);
+  color: var(--c-ink-dim); display: grid; justify-items: center; gap: var(--sp-1);
+}
+.hero__scroll::after {
+  content: ""; width: 1px; height: 32px; background: var(--c-ink-faint);
+  animation: kk-scroll 2.4s var(--e-out) infinite;
+}
+@keyframes kk-scroll { 0%,100% { transform: translateY(0); opacity: .4 } 50% { transform: translateY(4px); opacity: 1 } }
+@media (prefers-reduced-motion: reduce) { .hero__scroll::after { animation: none } }
+
+@media (max-width: 900px) {
+  /* 狭い画面では肩書きを左上へ。下は実績1行とスクロール誘導に明け渡す */
+  .hero__vert--sub  { top: calc(var(--h-header) + var(--sp-5)); bottom: auto; }
+  .hero__bottom     { bottom: calc(var(--sp-3) + var(--h-navbar)); }
+  .hero__highlights { line-height: 1.9; }
+}
+/* 画面が低いとき（横持ちのスマホ）だけ縦組みを縮めて、1列に収める */
+@media (max-height: 680px) {
+  .hero__vert--main { top: var(--h-header); font-size: 20px; }
+  .hero__vert--sub  { font-size: 14px; }
+}
+
+/* ------------------------------------------------------------
+   ABOUT
+   ------------------------------------------------------------ */
+.about__bio { margin-top: var(--sp-5); color: var(--c-ink-dim); }
+.about__career {
+  list-style: none; margin: var(--sp-5) 0 0; padding: 0;
+  border-top: 1px solid var(--c-rule);
+}
+.about__career li {
+  display: flex; flex-wrap: wrap; gap: var(--sp-3);
+  padding: var(--sp-3) 0; border-bottom: 1px solid var(--c-rule);
+}
+.career__detail { color: var(--c-ink-faint); }
+
+/* 人物写真。元が 875px しか無いので、表示幅を 440px までに抑えて
+   引き伸ばさない（2倍密度の画面でちょうど使い切る）。
+   機材の写真は列いっぱい、人物だけ幅を狭める ── 揃えないことで主役に見せる */
+.portrait { margin: 0; max-width: 440px; }
+.portrait img { width: 100%; }
+.portrait__cap {
+  display: flex; align-items: baseline; gap: var(--sp-3);
+  margin-top: var(--sp-3); padding-top: var(--sp-3);
+  border-top: 1px solid var(--c-rule);
+  font-family: var(--f-mincho); font-size: var(--fs-body);
+  letter-spacing: var(--ls-h2); color: var(--c-ink);
+}
+.portrait__cap span {
+  font-family: var(--f-en); font-size: var(--fs-caption);
+  letter-spacing: var(--ls-label); color: var(--c-ink-faint);
+}
+
+/* ------------------------------------------------------------
+   WORKS — ジャケット写真が1枚も無い前提で組む。
+   写真の代わりに「通し番号・曲名・波形」で1枚ずつ違う絵を作る。
+   波形の高さは曲名から決まる（render.mjs の waveBars）ので、
+   同じ曲は毎回同じ形になる。ジャケットが手に入ったら
+   .card__wave を <img> に差し替えるだけで済む組みにしてある。
+   ------------------------------------------------------------ */
+.card--song .card__frame {
+  aspect-ratio: 3 / 4;
+  border: 1px solid var(--c-rule); background: var(--c-bg-elev);
+  padding: var(--sp-4);
+  display: grid; grid-template-rows: auto 1fr auto; gap: var(--sp-4);
+}
+.card__top { display: flex; align-items: baseline; justify-content: space-between; gap: var(--sp-3); }
+.card__index {
+  font-family: var(--f-en); font-size: var(--fs-h2); line-height: 1;
+  letter-spacing: var(--ls-label); color: var(--c-ink-faint);
+}
+.card__label { font-family: var(--f-en); font-size: var(--fs-caption); color: var(--c-ink-faint); letter-spacing: var(--ls-label); }
+.card__name { align-self: end; }
+.card__title {
+  margin: 0; font-family: var(--f-mincho); font-weight: 600;
+  font-size: var(--fs-h2); line-height: var(--lh-head); letter-spacing: var(--ls-h2);
+}
+.card__artist { margin: var(--sp-2) 0 0; font-size: var(--fs-caption); color: var(--c-ink-dim); }
+
+/* 波形。棒の高さは HTML 側の style="height:◯%" で入る */
+.card__wave { display: flex; align-items: flex-end; gap: 2px; height: 44px; }
+.card__wave span {
+  flex: 1; min-height: 2px; background: var(--c-ink-faint);
+  transition: background var(--d-fast) var(--e-out);
+}
+/* 灯り色は「1画面に1〜2箇所」。触れている1枚だけが灯るので、その範囲に収まる */
+.card--song:hover .card__wave span,
+.card--song:focus-within .card__wave span { background: var(--c-accent); }
+.card--song .card__frame { transition: border-color var(--d-fast) var(--e-out); }
+.card--song:hover .card__frame { border-color: var(--c-ink); }
+
+.card__meta { margin: var(--sp-3) 0 0; }
+.card__year { margin-left: var(--sp-2); font-family: var(--f-en); color: var(--c-ink-faint); }
+.rail__note { margin: var(--sp-3) 0 0; }
+.rail__note a { border-bottom: 1px solid var(--c-rule); }
+.rail:focus-visible { outline: 1px solid var(--c-accent); outline-offset: var(--sp-2); }
+.rail-ctrl { margin-left: auto; }
+/* 矢印は JS があるときだけ出す。display:flex が hidden に勝ってしまうので明示する */
+.rail-ctrl[hidden] { display: none; }
+
+/* ------------------------------------------------------------
+   CREDITS（絞り込み）
+   ------------------------------------------------------------ */
+.filter { display: flex; flex-wrap: wrap; gap: var(--sp-4); margin-bottom: var(--sp-5); }
+.filter__btn {
+  appearance: none; background: none; border: 0; cursor: pointer;
+  padding: var(--sp-3) 0; min-height: 44px;
+  font-family: var(--f-sans); font-size: var(--fs-body); letter-spacing: var(--ls-body);
+  color: var(--c-ink-faint); border-bottom: 1px solid transparent;
+  transition: color var(--d-fast) var(--e-out), border-color var(--d-fast) var(--e-out);
+}
+.filter__btn:hover { color: var(--c-ink-dim); }
+/* 現在の状態は「色」だけでなく「下線」でも示す */
+.filter__btn[aria-pressed="true"] { color: var(--c-ink); border-bottom-color: var(--c-accent); }
+.filter__count { margin-left: var(--sp-2); font-family: var(--f-en); font-size: var(--fs-caption); color: var(--c-ink-faint); }
+
+/* 絞り込みで付ける hidden が .row の display:grid に負けないようにする */
+.rows [hidden] { display: none; }
+
+.row__meta { margin: var(--sp-1) 0 0; color: var(--c-ink-dim); font-size: var(--fs-caption); }
+.row__type { display: block; font-family: var(--f-en); font-size: var(--fs-caption); color: var(--c-ink-faint); letter-spacing: var(--ls-label); }
+.row .t-h3 { margin: 0; }
+.invert .row__meta { color: rgba(16,16,16,.62); }
+
+/* ------------------------------------------------------------
+   LIVE
+   ------------------------------------------------------------ */
+.live__media { margin-top: var(--sp-7); }
+/* 左端まで伸ばすのはヒーローだけ。左の固定ナビは白文字なので、
+   明色ブロックや写真を端まで広げると、その上でナビが読めなくなる。
+   （ヒーローだけは .hero::before の暗幕で読めるようにしてある） */
+.live__media img { width: 100%; height: clamp(200px, 34vh, 400px); object-fit: cover; }
+
+/* ------------------------------------------------------------
+   LISTEN
+   ------------------------------------------------------------ */
+.listen { display: grid; grid-template-columns: 1fr 1fr; gap: var(--sp-5); }
+.listen__item .t-label { margin-bottom: var(--sp-3); }
+.embed__link {
+  display: grid; gap: var(--sp-2); padding: var(--sp-5) var(--sp-4);
+  border: 1px solid var(--c-rule); min-height: 152px; align-content: center;
+  transition: background var(--d-fast) var(--e-out), border-color var(--d-fast) var(--e-out);
+}
+.embed__link:hover { background: rgba(255,255,255,.08); border-color: var(--c-ink); }
+.embed__label { font-family: var(--f-mincho); font-weight: 600; font-size: var(--fs-h3); letter-spacing: var(--ls-h2); }
+.embed iframe { width: 100%; height: 352px; border: 0; display: block; }
+@media (max-width: 900px) { .listen { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------
+   LESSON / CONTACT / FOOTER
+   ------------------------------------------------------------ */
+.lesson__note { margin: var(--sp-5) 0 0; color: rgba(16,16,16,.72); }
+.lesson__note a, .link { border-bottom: 1px solid currentColor; }
+.site-footer { padding-block: var(--sp-6); border-top: 1px solid var(--c-rule); }
