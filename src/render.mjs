@@ -104,6 +104,20 @@ export function renderAbout(p, manifest, imeta) {
     const d = known(c.detail) ? `<span class="career__detail">${esc(c.detail)}</span>` : "";
     return `<li>${esc(c.label)}${d}</li>`;
   }).join("\n        ");
+  const ag = p.agency;
+  const agency = (ag && ag.publish === true && known(ag.names) && ag.names.length)
+    ? `\n      <p class="about__agency t-caption">${esc(ag.label)}：${ag.names.map(esc).join(" ／ ")}</p>` : "";
+  const g = p.gear;
+  const gear = (g && g.publish === true && known(g.groups) && g.groups.length)
+    ? `\n      <div class="gear">
+        <p class="t-label">Gear</p>
+        <dl class="gear__list">
+          ${g.groups.map(gr => `<div class="gear__group">
+            <dt>${esc(gr.name)}</dt>
+            <dd>${gr.items.map(esc).join("<br>")}</dd>
+          </div>`).join("\n          ")}
+        </dl>
+      </div>` : "";
   return `<section class="section" id="about">
   <div class="container">
     ${nest(4, head("About", "経歴"))}
@@ -116,7 +130,7 @@ export function renderAbout(p, manifest, imeta) {
       </div>
       <ul class="about__career">
         ${career}
-      </ul>
+      </ul>${agency}${gear}
     </div>
     <div class="split__media">
       <figure class="portrait reveal">
@@ -252,42 +266,50 @@ export function spotifyEmbed(url) {
 }
 
 export function renderListen(p) {
-  const embed = spotifyEmbed(p.links.spotify);
-  const spotify = known(p.links.spotify)
-    ? `<div class="listen__item">
-        <p class="t-label">Spotify</p>
+  const track = (t, i) => {
+    const embed = spotifyEmbed(t.url);
+    return `<div class="listen__item reveal">
+        <p class="listen__rank">${String(i + 1).padStart(2, "0")}</p>
         <div class="embed"${embed ? ` data-embed="${esc(embed)}"` : ""}>
-          <a class="embed__link" href="${esc(p.links.spotify)}" target="_blank" rel="noopener">
-            <span class="embed__label">プレイリストを聴く</span>
-            <span class="t-caption">Spotify で開く</span>
+          <a class="embed__link" href="${esc(t.url)}" target="_blank" rel="noopener">
+            <span class="embed__label">${esc(t.title)}</span>
+            <span class="t-caption">${esc(t.artist)}</span>
           </a>
         </div>
-      </div>` : "";
-  const youtube = known(p.links.youtube)
-    ? `<div class="listen__item">
-        <p class="t-label">YouTube</p>
-        <div class="embed">
-          <a class="embed__link" href="${esc(p.links.youtube)}" target="_blank" rel="noopener">
-            <span class="embed__label">チャンネルを見る</span>
-            <span class="t-caption">YouTube で開く</span>
-          </a>
-        </div>
-      </div>` : "";
+      </div>`;
+  };
+  const tracks = known(p.spotifyTracks) && p.spotifyTracks.length
+    ? p.spotifyTracks.map(track).join("\n      ") : "";
+  const more = [
+    known(p.links.spotify) ? `<a class="link" href="${esc(p.links.spotify)}" target="_blank" rel="noopener">Spotify でプレイリストを聴く</a>` : "",
+    known(p.links.youtube) ? `<a class="link" href="${esc(p.links.youtube)}" target="_blank" rel="noopener">YouTube チャンネルを見る</a>` : "",
+  ].filter(Boolean).join("\n        ");
   return `<section class="section" id="listen">
   <div class="container">
     ${nest(4, head("Listen", "試聴"))}
     <div class="listen">
-      ${[spotify, youtube].filter(Boolean).join("\n      ")}
+      ${tracks}
     </div>
+    <p class="listen__more">
+        ${more}
+    </p>
   </div>
 </section>`;
 }
 
 export function renderLesson(p) {
   const l = p.lesson;
-  const rows = [
-    ["回数", l.frequency], ["料金", l.price], ["対象", l.target],
-  ].filter(r => known(r[1])).map(r =>
+  const plans = known(l.plans) ? l.plans.filter(x => known(x.name) && known(x.price)) : [];
+  const planRows = plans.map(x => {
+    const rec = x.recommended === true ? `<span class="plan__rec">おすすめ</span>` : "";
+    const note = known(x.note) ? `<span class="plan__note">${esc(x.note)}</span>` : "";
+    return `<div class="row${x.recommended === true ? " row--rec" : ""}">
+        <span class="row__date">${esc(x.name)}${rec}</span>
+        <div><b class="plan__price">${esc(x.price)}</b>${note}</div>
+      </div>`;
+  }).join("\n      ");
+  const extra = [["対象", l.target], ["場所", l.place], ["お支払い", l.payment]]
+    .filter(r => known(r[1])).map(r =>
     `<div class="row">
         <span class="row__date">${esc(r[0])}</span>
         <div>${esc(r[1])}</div>
@@ -296,7 +318,7 @@ export function renderLesson(p) {
   <div class="container">
     ${nest(4, head("Lesson", "レッスン"))}
     <div class="rows">
-      ${rows}
+      ${[planRows, extra].filter(Boolean).join("\n      ")}
     </div>
     <p class="lesson__note">お申し込み・ご相談は <a href="#contact">連絡先</a> から。</p>
   </div>
@@ -304,6 +326,24 @@ export function renderLesson(p) {
 }
 
 export function renderContact(p) {
+  const w = p.work || {};
+  const workRows = [["料金", w.price], ["納期", w.delivery], ["収録", w.style]]
+    .filter(r => known(r[1])).map(r =>
+    `<div class="row reveal">
+        <span class="row__date">${esc(r[0])}</span>
+        <div>${esc(r[1])}</div>
+      </div>`).join("\n      ");
+  const work = workRows
+    ? `<p class="t-label contact__sub">制作のご依頼について</p>
+    <div class="rows">
+      ${workRows}
+    </div>` : "";
+
+  const form = known(p.contactForm)
+    ? `<p class="contact__cta">
+      <a class="btn" href="${esc(p.contactForm)}" target="_blank" rel="noopener">お問い合わせフォームへ</a>
+    </p>` : "";
+
   const items = [];
   if (known(p.email)) items.push(["Email", p.email, `mailto:${p.email}`]);
   const L = p.links;
@@ -320,6 +360,8 @@ export function renderContact(p) {
   return `<section class="section" id="contact">
   <div class="container">
     ${nest(4, head("Contact", "連絡先"))}
+    ${work}${form}
+    <p class="t-label contact__sub">SNS</p>
     <div class="rows">
       ${rows}
     </div>
