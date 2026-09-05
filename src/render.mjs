@@ -130,7 +130,7 @@ export function renderAbout(p, manifest, imeta) {
       </div>
       <ul class="about__career">
         ${career}
-      </ul>${agency}${gear}
+      </ul>${agency}
     </div>
     <div class="split__media">
       <figure class="portrait reveal">
@@ -142,6 +142,7 @@ export function renderAbout(p, manifest, imeta) {
       <div class="reveal">${img("about-3", manifest, imeta)}</div>
     </div>
   </div>
+  <div class="container">${gear}</div>
 </section>`;
 }
 
@@ -154,18 +155,27 @@ export function renderWorks(credits) {
     const metaLine = meta.length
       ? `\n        <p class="card__meta">${meta.map(esc).join(" ／ ")}</p>` : "";
     const wave = waveBars(c.title).map(v => `<span style="height:${v}%"></span>`).join("");
+    // 聴ける曲はカードごとリンクにする。聴けない曲は静かなカードのまま（嘘の導線を作らない）
+    const playable = known(c.spotify);
+    const openTag = playable
+      ? `<a class="card__frame card__frame--play" href="${esc(c.spotify)}" target="_blank" rel="noopener" aria-label="${esc(c.title)} を Spotify で聴く">`
+      : `<div class="card__frame">`;
+    const closeTag = playable ? `</a>` : `</div>`;
+    const label = playable
+      ? `<span class="card__label card__label--play">Listen</span>`
+      : `<span class="card__label">Song</span>`;
     return `<article class="card card--song reveal">
-        <div class="card__frame">
+        ${openTag}
           <div class="card__top">
             <span class="card__index">${String(i + 1).padStart(2, "0")}</span>
-            <span class="card__label">Song</span>
+            ${label}
           </div>
           <div class="card__name">
             <h3 class="card__title">${esc(c.title)}</h3>
             <p class="card__artist">${esc(c.artist)}</p>
           </div>
           <div class="card__wave" aria-hidden="true">${wave}</div>
-        </div>${metaLine}
+        ${closeTag}${metaLine}
       </article>`;
   }).join("\n      ");
   const ctrl = `<div class="rail-ctrl" data-rail-ctrl hidden>
@@ -180,7 +190,7 @@ export function renderWorks(credits) {
     <div class="rail" tabindex="0" role="group" aria-label="代表曲">
       ${cards}
     </div>
-    <p class="t-caption rail__note">全${credits.filter(c => c.category === "compose").length}曲の一覧は <a href="#credits">全実績</a> に掲載しています。</p>
+    <p class="t-caption rail__note">Listen と書かれたカードは、そのまま Spotify で聴けます。全${credits.filter(c => c.category === "compose").length}曲の一覧は <a href="#credits">全実績</a> に掲載しています。</p>
   </div>
 </section>`;
 }
@@ -320,7 +330,7 @@ export function renderLesson(p) {
     <div class="rows">
       ${[planRows, extra].filter(Boolean).join("\n      ")}
     </div>
-    <p class="lesson__note">お申し込み・ご相談は <a href="#contact">連絡先</a> から。</p>
+    <p class="lesson__note">体験レッスンのお申し込み・ご相談は <a href="#contact">連絡先</a> から。</p>
   </div>
 </section>`;
 }
@@ -333,16 +343,28 @@ export function renderContact(p) {
         <span class="row__date">${esc(r[0])}</span>
         <div>${esc(r[1])}</div>
       </div>`).join("\n      ");
-  const work = workRows
-    ? `<p class="t-label contact__sub">制作のご依頼について</p>
-    <div class="rows">
-      ${workRows}
-    </div>` : "";
+  // 何を頼めるか（品目）— 料金や納期より先に出す
+  const services = known(w.services) && w.services.length
+    ? `<ul class="services">
+      ${w.services.filter(s => known(s.name)).map(s => {
+        const n = known(s.note) ? `<span class="services__note">${esc(s.note)}</span>` : "";
+        return `<li>${esc(s.name)}${n}</li>`;
+      }).join("\n      ")}
+    </ul>` : "";
 
-  const form = known(p.contactForm)
+  const work = (services || workRows)
+    ? `<p class="t-label contact__sub">ご依頼いただけること</p>
+    ${services}
+    ${workRows ? `<div class="rows">\n      ${workRows}\n    </div>` : ""}` : "";
+
+  // フォームが未完成のあいだも、受け口を必ず1つ出しておく
+  const cta = known(p.contactForm)
+    ? { url: p.contactForm, action: "お問い合わせフォームへ", note: "" }
+    : (known(p.contactCta) && known(p.contactCta.url) ? p.contactCta : null);
+  const form = cta
     ? `<p class="contact__cta">
-      <a class="btn" href="${esc(p.contactForm)}" target="_blank" rel="noopener">お問い合わせフォームへ</a>
-    </p>` : "";
+      <a class="btn" href="${esc(cta.url)}" target="_blank" rel="noopener">${esc(cta.action)}</a>
+    </p>${known(cta.note) ? `\n    <p class="t-caption contact__ctanote">${esc(cta.note)}</p>` : ""}` : "";
 
   const items = [];
   if (known(p.email)) items.push(["Email", p.email, `mailto:${p.email}`]);
