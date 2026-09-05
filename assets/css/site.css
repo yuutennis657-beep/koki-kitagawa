@@ -292,3 +292,58 @@ img { height: auto; }
   .gear__group { grid-template-columns: 1fr; gap: var(--sp-1); }
   .listen__more { gap: var(--sp-3); flex-direction: column; }
 }
+
+/* ------------------------------------------------------------
+   追加（2026/9/5 その2）営業まわりの改善
+   ・ヒーローが黒一色に見える → 暗幕を薄くし、写真を少し起こす
+   ・聴けるカード ・機材を全幅へ ・発注メニューと依頼ボタン
+   ------------------------------------------------------------ */
+
+/* ヒーロー：暗幕2枚が重なって写真が沈んでいたので、両方を薄くする。
+   色は増やしていない（同じ rgba(12,18,17,…) の濃さだけを下げた） */
+.hero__media::after {
+  background: linear-gradient(180deg,
+    rgba(12,18,17,.42) 0%, rgba(12,18,17,.06) 45%, rgba(12,18,17,.78) 100%);
+}
+.hero::before {
+  background: linear-gradient(90deg,
+    rgba(12,18,17,.78) 0%, rgba(12,18,17,.22) 18%, rgba(12,18,17,0) 30%);
+}
+/* 暗い写真を少しだけ起こす。宣材写真が来たら 1 に戻してよい */
+.hero__media img { filter: brightness(1.18) contrast(1.04); }
+
+/* 聴けるカード：枠ごとリンクにする */
+.card__frame--play { display: grid; cursor: pointer; }
+.card__label--play { color: var(--c-accent); }
+.card__frame--play:hover, .card__frame--play:focus-visible { border-color: var(--c-ink); }
+.card__frame--play:focus-visible { outline: 2px solid var(--c-accent); outline-offset: 3px; }
+
+/* 機材：2カラムの外に出したので、全幅で2列に組む */
+.gear { margin-top: var(--sp-7); }
+.gear__list { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--sp-6); }
+.gear__group { grid-template-columns: 160px 1fr; }
+
+/* 発注メニュー */
+.services {
+  list-style: none; margin: 0 0 var(--sp-5); padding: 0;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--sp-3) var(--sp-5);
+}
+.services li {
+  font-family: var(--f-mincho); font-weight: 600; font-size: var(--fs-h3);
+  letter-spacing: var(--ls-h2); padding-bottom: var(--sp-3);
+  border-bottom: 1px solid var(--c-rule);
+}
+.services__note {
+  display: block; margin-top: var(--sp-1);
+  font-family: var(--f-sans); font-weight: 300; font-size: var(--fs-caption);
+  letter-spacing: var(--ls-body); color: var(--c-ink-dim);
+}
+
+.contact__ctanote { margin: var(--sp-3) 0 0; }
+
+@media (max-width: 900px) {
+  .gear__list { grid-template-columns: 1fr; }
+  .gear__group { grid-template-columns: 1fr; }
+  .services { grid-template-columns: 1fr; }
+  .hero__media img { filter: brightness(1.12) contrast(1.03); }
+}
