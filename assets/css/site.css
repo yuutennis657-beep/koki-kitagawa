@@ -223,3 +223,72 @@ img { height: auto; }
 .lesson__note { margin: var(--sp-5) 0 0; color: rgba(16,16,16,.72); }
 .lesson__note a, .link { border-bottom: 1px solid currentColor; }
 .site-footer { padding-block: var(--sp-6); border-top: 1px solid var(--c-rule); }
+
+/* ------------------------------------------------------------
+   追加（2026/8/30 本人回答の反映）
+   機材 / 事務所 / Spotify先頭3曲 / 料金プラン / 制作依頼
+   ------------------------------------------------------------ */
+
+/* 事務所（掲載許可が出るまで publish:false で出力されない） */
+.about__agency { margin: var(--sp-4) 0 0; }
+
+/* 機材 */
+.gear { margin: var(--sp-6) 0 0; }
+.gear__list { margin: var(--sp-3) 0 0; border-top: 1px solid var(--c-rule); }
+.gear__group {
+  display: grid; grid-template-columns: 128px 1fr; gap: var(--sp-3);
+  padding: var(--sp-3) 0; border-bottom: 1px solid var(--c-rule);
+}
+.gear__group dt {
+  font-family: var(--f-mincho); font-weight: 600;
+  letter-spacing: var(--ls-h2); color: var(--c-ink);
+}
+.gear__group dd {
+  margin: 0; font-family: var(--f-en); font-size: var(--fs-caption);
+  line-height: 2; letter-spacing: .04em; color: var(--c-ink-dim);
+}
+
+/* 試聴：先頭3曲 */
+.listen { grid-template-columns: repeat(3, 1fr); }
+.listen__rank {
+  margin: 0 0 var(--sp-2); font-family: var(--f-en); font-size: var(--fs-caption);
+  letter-spacing: var(--ls-label); color: var(--c-accent);
+}
+.listen__more {
+  display: flex; flex-wrap: wrap; gap: var(--sp-5);
+  margin: var(--sp-5) 0 0; font-size: var(--fs-caption);
+}
+
+/* レッスンの料金プラン（明色ブロック内） */
+.plan__price { font-weight: 500; font-family: var(--f-en); letter-spacing: .04em; }
+.plan__note {
+  display: block; font-size: var(--fs-caption); color: rgba(16,16,16,.55);
+}
+.plan__rec {
+  display: inline-block; margin-left: var(--sp-2); padding: 1px 8px;
+  font-family: var(--f-sans); font-size: 11px; letter-spacing: .08em;
+  border: 1px solid rgba(16,16,16,.45); color: var(--c-inv-ink);
+}
+/* おすすめの行は色ではなく「左の罫」と「おすすめ」の文字で示す */
+.row--rec {
+  box-shadow: inset 2px 0 0 rgba(16,16,16,.75);
+  margin-inline: calc(var(--sp-3) * -1); padding-inline: var(--sp-3);
+}
+
+/* 連絡先 */
+.contact__sub { margin: var(--sp-6) 0 var(--sp-3); }
+.contact__sub:first-of-type { margin-top: 0; }
+.contact__cta { margin: var(--sp-5) 0 0; }
+.btn {
+  display: inline-block; padding: var(--sp-3) var(--sp-5);
+  border: 1px solid var(--c-ink); color: var(--c-ink);
+  font-family: var(--f-mincho); font-weight: 600; letter-spacing: var(--ls-h2);
+  transition: background var(--d-fast) var(--e-out), color var(--d-fast) var(--e-out);
+}
+.btn:hover, .btn:focus-visible { background: var(--c-ink); color: var(--c-bg); }
+
+@media (max-width: 900px) {
+  .listen { grid-template-columns: 1fr; }
+  .gear__group { grid-template-columns: 1fr; gap: var(--sp-1); }
+  .listen__more { gap: var(--sp-3); flex-direction: column; }
+}
