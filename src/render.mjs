@@ -170,8 +170,20 @@ export function renderWorks(credits) {
     const label = playable
       ? `<span class="card__label card__label--play">再生</span>`
       : `<span class="card__label">Song</span>`;
-    return `<article class="card card--song reveal">
-        ${openTag}
+    // ジャケットがある曲は「写真の上に文字を重ねない」。
+    // ジャケット自体に曲名が入っていることが多く、重ねると二重になって読めなくなる
+    const inner = known(c.jacket)
+      ? `
+          <div class="card__art">
+            <span class="card__index">${String(i + 1).padStart(2, "0")}</span>
+            ${label}
+          </div>
+          <div class="card__name">
+            <h3 class="card__title">${esc(c.title)}</h3>
+            <p class="card__artist">${esc(c.artist)}</p>
+          </div>
+        `
+      : `
           <div class="card__top">
             <span class="card__index">${String(i + 1).padStart(2, "0")}</span>
             ${label}
@@ -181,7 +193,9 @@ export function renderWorks(credits) {
             <p class="card__artist">${esc(c.artist)}</p>
           </div>
           <div class="card__wave" aria-hidden="true">${wave}</div>
-        ${closeTag}${metaLine}
+        `;
+    return `<article class="card card--song reveal">
+        ${openTag}${inner}${closeTag}${metaLine}
       </article>`;
   }).join("\n      ");
   const ctrl = `<div class="rail-ctrl" data-rail-ctrl hidden>
