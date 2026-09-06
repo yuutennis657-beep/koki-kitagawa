@@ -75,16 +75,19 @@
 
   /* 4b. 試聴の埋め込みは押されてから差し込む（初期表示を軽くする） */
   Array.prototype.forEach.call(document.querySelectorAll("[data-embed]"), function (box) {
-    var link = box.querySelector("a");
+    var link = box.matches("a") ? box : box.querySelector("a");
     if (!link) return;
     link.addEventListener("click", function (ev) {
+      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return;  /* 新しいタブで開きたい人はそのまま */
       ev.preventDefault();
       var f = document.createElement("iframe");
       f.src = box.getAttribute("data-embed");
-      f.title = "Spotify プレイリスト";
+      f.title = box.getAttribute("aria-label") || "Spotify プレイヤー";
       f.loading = "lazy";
-      f.allow = "encrypted-media";
+      f.allow = "encrypted-media; clipboard-write; fullscreen; picture-in-picture";
       box.innerHTML = "";
+      box.classList.add("is-playing");
+      box.removeAttribute("style");
       box.appendChild(f);
     });
   });
