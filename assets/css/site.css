@@ -355,13 +355,16 @@ img { height: auto; }
 /* ジャケットは Spotify の画像CDNを --art で受け取り、背景に敷く。
    読み込めなかったときは、下の波形カードがそのまま見えるので崩れない。
    写真の上には必ず暗幕（design-system の作法どおり） */
-.card__frame--art {
+/* ※ .card--song .card__frame の background 一括指定に負けるので、
+   同じ強さ（クラス2つ）で、かつ後ろに書いて上書きする */
+.card--song .card__frame--art {
   background-image: linear-gradient(180deg, rgba(12,18,17,.30) 0%, rgba(12,18,17,.55) 45%, rgba(12,18,17,.92) 100%), var(--art);
   background-size: cover, cover;
   background-position: center, center;
+  background-repeat: no-repeat, no-repeat;
 }
 /* ジャケットが出ている間は波形を控えめに（情報が二重にならないように） */
-.card__frame--art .card__wave span { background: rgba(255,255,255,.28); }
+.card--song .card__frame--art .card__wave span { background: rgba(255,255,255,.28); }
 .card--song:hover .card__frame--art .card__wave span,
 .card--song:focus-within .card__frame--art .card__wave span { background: var(--c-accent); }
 
