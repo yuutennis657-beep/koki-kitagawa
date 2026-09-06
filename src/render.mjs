@@ -157,12 +157,18 @@ export function renderWorks(credits) {
     const wave = waveBars(c.title).map(v => `<span style="height:${v}%"></span>`).join("");
     // 聴ける曲はカードごとリンクにする。聴けない曲は静かなカードのまま（嘘の導線を作らない）
     const playable = known(c.spotify);
+    const id = playable ? String(c.spotify).split("/track/")[1] : null;
+    // ジャケットは Spotify の画像CDNをそのまま参照する（自前で持たない＝規約どおり）。
+    // 読み込めなかったときは下の波形カードがそのまま出るので崩れない
+    const art = known(c.jacket)
+      ? ` style="--art:url('https://i.scdn.co/image/${esc(c.jacket)}')"` : "";
+    const artClass = known(c.jacket) ? " card__frame--art" : "";
     const openTag = playable
-      ? `<a class="card__frame card__frame--play" href="${esc(c.spotify)}" target="_blank" rel="noopener" aria-label="${esc(c.title)} を Spotify で聴く">`
+      ? `<a class="card__frame card__frame--play${artClass}"${art} data-embed="https://open.spotify.com/embed/track/${esc(id)}" href="${esc(c.spotify)}" target="_blank" rel="noopener" aria-label="${esc(c.title)} を再生する">`
       : `<div class="card__frame">`;
     const closeTag = playable ? `</a>` : `</div>`;
     const label = playable
-      ? `<span class="card__label card__label--play">Listen</span>`
+      ? `<span class="card__label card__label--play">再生</span>`
       : `<span class="card__label">Song</span>`;
     return `<article class="card card--song reveal">
         ${openTag}
@@ -190,7 +196,7 @@ export function renderWorks(credits) {
     <div class="rail" tabindex="0" role="group" aria-label="代表曲">
       ${cards}
     </div>
-    <p class="t-caption rail__note">Listen と書かれたカードは、そのまま Spotify で聴けます。全${credits.filter(c => c.category === "compose").length}曲の一覧は <a href="#credits">全実績</a> に掲載しています。</p>
+    <p class="t-caption rail__note">ジャケットのあるカードは、押すとこの画面で再生できます。全${credits.filter(c => c.category === "compose").length}曲の一覧は <a href="#credits">全実績</a> に掲載しています。</p>
   </div>
 </section>`;
 }
@@ -276,33 +282,38 @@ export function spotifyEmbed(url) {
 }
 
 export function renderListen(p) {
-  const track = (t, i) => {
-    const embed = spotifyEmbed(t.url);
-    return `<div class="listen__item reveal">
-        <p class="listen__rank">${String(i + 1).padStart(2, "0")}</p>
+  // 代表3曲は Works で鳴らせるようになったので、ここは全曲まとめて聴ける
+  // プレイリスト1本にする（同じ曲を2度出さない）
+  const embed = spotifyEmbed(p.links.spotify);
+  const list = known(p.spotifyTracks) && p.spotifyTracks.length
+    ? `<p class="listen__lead t-caption">まずはこの3曲から：${p.spotifyTracks.map(t => esc(t.title)).join(" ／ ")}</p>` : "";
+  const spotify = known(p.links.spotify)
+    ? `<div class="listen__item reveal">
+        <p class="t-label">Spotify</p>
         <div class="embed"${embed ? ` data-embed="${esc(embed)}"` : ""}>
-          <a class="embed__link" href="${esc(t.url)}" target="_blank" rel="noopener">
-            <span class="embed__label">${esc(t.title)}</span>
-            <span class="t-caption">${esc(t.artist)}</span>
+          <a class="embed__link" href="${esc(p.links.spotify)}" target="_blank" rel="noopener">
+            <span class="embed__label">プレイリストを再生</span>
+            <span class="t-caption">提供曲・参加曲をまとめて</span>
           </a>
         </div>
-      </div>`;
-  };
-  const tracks = known(p.spotifyTracks) && p.spotifyTracks.length
-    ? p.spotifyTracks.map(track).join("\n      ") : "";
-  const more = [
-    known(p.links.spotify) ? `<a class="link" href="${esc(p.links.spotify)}" target="_blank" rel="noopener">Spotify でプレイリストを聴く</a>` : "",
-    known(p.links.youtube) ? `<a class="link" href="${esc(p.links.youtube)}" target="_blank" rel="noopener">YouTube チャンネルを見る</a>` : "",
-  ].filter(Boolean).join("\n        ");
+      </div>` : "";
+  const youtube = known(p.links.youtube)
+    ? `<div class="listen__item reveal">
+        <p class="t-label">YouTube</p>
+        <div class="embed">
+          <a class="embed__link" href="${esc(p.links.youtube)}" target="_blank" rel="noopener">
+            <span class="embed__label">チャンネルを見る</span>
+            <span class="t-caption">YouTube で開く</span>
+          </a>
+        </div>
+      </div>` : "";
   return `<section class="section" id="listen">
   <div class="container">
     ${nest(4, head("Listen", "試聴"))}
-    <div class="listen">
-      ${tracks}
+    ${list}
+    <div class="listen listen--two">
+      ${[spotify, youtube].filter(Boolean).join("\n      ")}
     </div>
-    <p class="listen__more">
-        ${more}
-    </p>
   </div>
 </section>`;
 }
