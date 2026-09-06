@@ -174,11 +174,12 @@ export function renderWorks(credits) {
     // ジャケット自体に曲名が入っていることが多く、重ねると二重になって読めなくなる
     const inner = known(c.jacket)
       ? `
-          <div class="card__art">
-            <span class="card__index">${String(i + 1).padStart(2, "0")}</span>
-            ${label}
-          </div>
+          <div class="card__art" aria-hidden="true"></div>
           <div class="card__name">
+            <div class="card__top">
+              <span class="card__index">${String(i + 1).padStart(2, "0")}</span>
+              ${label}
+            </div>
             <h3 class="card__title">${esc(c.title)}</h3>
             <p class="card__artist">${esc(c.artist)}</p>
           </div>
