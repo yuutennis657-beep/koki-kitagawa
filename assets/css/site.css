@@ -369,16 +369,10 @@ img { height: auto; }
   background-image: var(--art);
   background-size: cover; background-position: center; background-repeat: no-repeat;
 }
-/* 隅に置く番号とラベルが写真に負けないよう、上端だけ薄く暗幕 */
-.card__art::after {
-  content: ""; position: absolute; inset: 0 0 auto; height: 42%;
-  background: linear-gradient(180deg, rgba(12,18,17,.72) 0%, rgba(12,18,17,0) 100%);
-}
-.card__art .card__index,
-.card__art .card__label { position: absolute; top: var(--sp-3); z-index: 1; }
-.card__art .card__index { left: var(--sp-4); }
-.card__art .card__label { right: var(--sp-4); }
+/* 写真の上には一文字も置かない。番号と「再生」は写真の下の暗い帯へ */
 .card--song .card__frame--art .card__name { padding: var(--sp-4); }
+.card--song .card__frame--art .card__top { margin-bottom: var(--sp-3); }
+.card--song .card__frame--art .card__index { font-size: var(--fs-h3); }
 
 /* 「再生」ラベルの前に小さな三角を置く（色だけで伝えない） */
 .card__label--play::before {
