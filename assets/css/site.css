@@ -355,18 +355,30 @@ img { height: auto; }
 /* ジャケットは Spotify の画像CDNを --art で受け取り、背景に敷く。
    読み込めなかったときは、下の波形カードがそのまま見えるので崩れない。
    写真の上には必ず暗幕（design-system の作法どおり） */
-/* ※ .card--song .card__frame の background 一括指定に負けるので、
-   同じ強さ（クラス2つ）で、かつ後ろに書いて上書きする */
+/* ジャケットのあるカード。
+   写真の上に曲名を重ねない ── ジャケット自体に曲名が入っていることが多く、
+   重ねると二重になって両方読めなくなるため、写真は正方形で見せ、文字は下に置く。
+   （※ .card--song .card__frame の background 一括指定に負けるので、
+      同じ強さ＝クラス2つ で、かつ後ろに書いて上書きしている） */
 .card--song .card__frame--art {
-  background-image: linear-gradient(180deg, rgba(12,18,17,.30) 0%, rgba(12,18,17,.55) 45%, rgba(12,18,17,.92) 100%), var(--art);
-  background-size: cover, cover;
-  background-position: center, center;
-  background-repeat: no-repeat, no-repeat;
+  aspect-ratio: auto; padding: 0; display: block;
+  background: var(--c-bg-elev);
 }
-/* ジャケットが出ている間は波形を控えめに（情報が二重にならないように） */
-.card--song .card__frame--art .card__wave span { background: rgba(255,255,255,.28); }
-.card--song:hover .card__frame--art .card__wave span,
-.card--song:focus-within .card__frame--art .card__wave span { background: var(--c-accent); }
+.card__art {
+  position: relative; display: block; aspect-ratio: 1;
+  background-image: var(--art);
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+}
+/* 隅に置く番号とラベルが写真に負けないよう、上端だけ薄く暗幕 */
+.card__art::after {
+  content: ""; position: absolute; inset: 0 0 auto; height: 42%;
+  background: linear-gradient(180deg, rgba(12,18,17,.72) 0%, rgba(12,18,17,0) 100%);
+}
+.card__art .card__index,
+.card__art .card__label { position: absolute; top: var(--sp-3); z-index: 1; }
+.card__art .card__index { left: var(--sp-4); }
+.card__art .card__label { right: var(--sp-4); }
+.card--song .card__frame--art .card__name { padding: var(--sp-4); }
 
 /* 「再生」ラベルの前に小さな三角を置く（色だけで伝えない） */
 .card__label--play::before {
