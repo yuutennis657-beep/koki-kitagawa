@@ -167,7 +167,7 @@
     "label": "お仕事のご依頼",
     "action": "Instagram の DM へ",
     "url": "https://www.instagram.com/kitagawa_kouki/",
-    "note": "お問い合わせフォームは準備中です。それまでは DM でお受けしています。",
+    "note": "Instagram の DM が開きます。曲の尺と納期だけ書いていただければ返信します。（お問い合わせフォームは準備中です）",
     "status": "暫定。フォームURLが来たら url を差し替え、action を「お問い合わせフォームへ」にする"
   }
 }
