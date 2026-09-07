@@ -391,3 +391,79 @@ img { height: auto; }
 .listen--two { grid-template-columns: 1fr 1fr; }
 .listen__lead { margin: 0 0 var(--sp-5); }
 @media (max-width: 900px) { .listen--two { grid-template-columns: 1fr; } }
+
+/* ------------------------------------------------------------
+   導線の変更（2026/9/7）— 変更設計書 v1.0
+   見た目は変えない。色・書体・角丸・影・動きを1つも足していない。
+   ここで使っているのは kk-design-system.css の変数と、既存の .btn / .link だけ。
+   ------------------------------------------------------------ */
+
+/* 変更1｜ヘッダーに依頼ボタンを常駐（.btn を一回り小さくしただけ） */
+.social { align-items: center; }
+.btn--nav {
+  opacity: 1;                 /* SNSアイコンより一段だけ前に出す。色は足していない */
+  padding: var(--sp-2) var(--sp-4);
+  font-size: var(--fs-caption);
+  letter-spacing: var(--ls-label);
+  line-height: 1.7;
+}
+/* 狭い画面では右上が詰まるので、下端ナビ側（変更6）に譲る */
+@media (max-width: 900px) { .btn--nav { display: none; } }
+
+/* 変更6｜スマホの下端ナビの右端に「ご依頼」。囲まない・背景も変えない */
+.site-nav__cta { display: none; }
+@media (max-width: 900px) {
+  .site-nav__cta { display: block; color: var(--c-ink); }
+  .site-nav { justify-content: space-between; }
+}
+
+/* 変更2｜ヒーローの2択CTA。主副の差は枠線の有無だけでつける */
+.hero__cta {
+  margin: 0; display: flex; align-items: center; justify-content: center;
+  gap: var(--sp-5); flex-wrap: wrap;
+}
+.hero__cta-sub {
+  font-family: var(--f-mincho); font-weight: 600;
+  letter-spacing: var(--ls-h2); color: var(--c-ink);
+}
+/* 変更3｜押した先で何が起きるかを、押す前に書く */
+.hero__ctanote { margin: 0; text-align: center; max-width: 34em; }
+
+/* 変更4｜3回目のCTAはボタンにしない。罫線1本の上に文字リンク1つ */
+.cta-quiet {
+  margin: var(--sp-6) 0 0; padding-top: var(--sp-5);
+  border-top: 1px solid var(--c-rule); text-align: center;
+}
+.cta-quiet .link {
+  font-family: var(--f-mincho); font-weight: 600;
+  font-size: var(--fs-h3); letter-spacing: var(--ls-h2);
+}
+
+/* 変更5｜畳む。JS は使わない（<details> だけ）。JS を切っても全部読める */
+.fold { border-top: 1px solid var(--c-rule); }
+.fold__sum {
+  display: flex; align-items: baseline; gap: var(--sp-3);
+  padding: var(--sp-4) 0; cursor: pointer; list-style: none;
+  font-family: var(--f-en); font-size: var(--fs-caption);
+  letter-spacing: var(--ls-label); color: var(--c-ink-dim);
+  transition: color var(--d-fast) var(--e-out);
+}
+.fold__sum::-webkit-details-marker { display: none; }
+.fold__sum:hover { color: var(--c-ink); }
+.fold__hint::after { content: " ＋"; }
+.fold[open] > .fold__sum .fold__hint::after { content: " －"; }
+.fold .rows { border-top: 0; }
+/* Gear は About の中で全幅に置く。畳んだ状態が既定 */
+.gear.fold { margin-top: var(--sp-6); }
+.gear.fold .gear__list { margin-top: 0; border-top: 0; }
+
+/* 変更5｜試聴は独立セクションをやめ、楽曲提供の下に置く */
+.listen-block { margin-top: var(--sp-6); padding-top: var(--sp-5); border-top: 1px solid var(--c-rule); }
+.listen-block__head { margin: 0 0 var(--sp-4); }
+.listen-block .listen__lead { margin: 0 0 var(--sp-4); }
+
+/* 変更5｜About の写真列。1枚ずつ縦に積むのをやめ、ポートレート＋3枚の帯にする
+   （写真は1枚も減らしていない。並べ方だけを変えた） */
+.split__media { grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); align-content: start; }
+.split__media > .portrait { grid-column: 1 / -1; }
+.split__media > div img { width: 100%; height: clamp(120px, 18vh, 220px); object-fit: cover; }
