@@ -50,17 +50,17 @@
 </header>
 
 <nav class="site-nav" aria-label="ページ内の案内">
-  <a href="#top">Top</a>
   <a href="#about">About</a>
   <a href="#works">Works</a>
   <a href="#credits">Credits</a>
   <a href="#live">Live</a>
-  <a href="#listen">Listen</a>
   <a href="#lesson">Lesson</a>
   <a href="#contact">Contact</a>
+  <a class="site-nav__cta" href="#contact">ご依頼</a>
 </nav>
 
 <div class="social">
+  <a class="btn btn--nav" href="#contact">ご依頼</a>
   <a href="https://www.instagram.com/kitagawa_kouki/" target="_blank" rel="noopener" aria-label="Instagram">IG</a>
   <a href="https://www.youtube.com/@KokiKitagawa" target="_blank" rel="noopener" aria-label="YouTube">YT</a>
   <a href="https://x.com/Gt_koki_" target="_blank" rel="noopener" aria-label="X">X</a>
@@ -75,6 +75,11 @@
       <p class="hero__vert hero__vert--sub is-accent">ギタリスト／作曲・編曲</p>
       <div class="hero__bottom">
         <p class="hero__highlights">CDTV 出演 ／ SUMMER SONIC 2023 ／ B-PROJECT 楽曲提供</p>
+        <p class="hero__cta">
+          <a class="btn" href="#contact">制作のご依頼</a>
+          <a class="link hero__cta-sub" href="#works">聴いてみる &rarr;</a>
+        </p>
+        <p class="t-caption hero__ctanote">料金・納期・お受けできる内容へ。ご依頼は Instagram の DM から。</p>
         <a class="hero__scroll" href="#about"><span>Scroll</span></a>
       </div>
     </div>
@@ -113,8 +118,8 @@
       </div>
     </div>
     <div class="container">
-        <div class="gear">
-          <p class="t-label">Gear</p>
+        <details class="gear fold">
+          <summary class="fold__sum"><span class="t-label">Gear</span><span class="fold__hint">機材を見る</span></summary>
           <dl class="gear__list">
             <div class="gear__group">
               <dt>制作・録音</dt>
@@ -133,7 +138,7 @@
               <dd>Fractal Audio Axe-Fx II XL+<br>Line 6 Helix Floor</dd>
             </div>
           </dl>
-        </div></div>
+        </details></div>
   </section>
 
   <section class="section" id="works">
@@ -235,6 +240,31 @@
         </article>
       </div>
       <p class="t-caption rail__note">ジャケットのあるカードは、押すとこの画面で再生できます。全10曲の一覧は <a href="#credits">全実績</a> に掲載しています。</p>
+      <div class="listen-block">
+        <p class="t-label listen-block__head">Listen &mdash; まとめて聴く</p>
+        <p class="listen__lead t-caption">まずはこの3曲から：FLAME ／ Memory ／ 視聴覚Fighter</p>
+        <div class="listen listen--two">
+          <div class="listen__item reveal">
+              <p class="t-label">Spotify</p>
+              <div class="embed" data-embed="https://open.spotify.com/embed/playlist/4vF3Pt0G9U2wvwlmTueu7q">
+                <a class="embed__link" href="https://open.spotify.com/playlist/4vF3Pt0G9U2wvwlmTueu7q" target="_blank" rel="noopener">
+                  <span class="embed__label">プレイリストを再生</span>
+                  <span class="t-caption">提供曲・参加曲をまとめて</span>
+                </a>
+              </div>
+            </div>
+          <div class="listen__item reveal">
+              <p class="t-label">YouTube</p>
+              <div class="embed">
+                <a class="embed__link" href="https://www.youtube.com/@KokiKitagawa" target="_blank" rel="noopener">
+                  <span class="embed__label">チャンネルを見る</span>
+                  <span class="t-caption">YouTube で開く</span>
+                </a>
+              </div>
+            </div>
+        </div>
+      </div>
+      <p class="cta-quiet"><a class="link" href="#contact">この人に頼む</a></p>
     </div>
   </section>
 
@@ -442,88 +472,63 @@
             <h3 class="t-h3">シュレック・ザ・ミュージカル</h3>
           </div>
         </div>
-        <div class="row reveal">
+      </div>
+      <details class="fold">
+        <summary class="fold__sum"><span class="fold__hint">出演をすべて見る（全12件）</span></summary>
+        <div class="rows">
+          <div class="row reveal">
           <span class="row__date">2019<span class="row__type">STAGE</span></span>
           <div>
             <h3 class="t-h3">あんさんぶるスターズ！オン・ステージ</h3>
             <p class="row__meta">劇中のギター演奏／演技指導</p>
           </div>
         </div>
-        <div class="row reveal">
+          <div class="row reveal">
           <span class="row__date"><span class="row__type">LIVE</span></span>
           <div>
             <h3 class="t-h3">LAWSON presents シユイ 1st Live「シユイさんといっしょ #01」（シユイ サポート）</h3>
             <p class="row__meta">サポートギター</p>
           </div>
         </div>
-        <div class="row reveal">
+          <div class="row reveal">
           <span class="row__date"><span class="row__type">LIVE</span></span>
           <div>
             <h3 class="t-h3">LAWSON presents シユイ 2nd Live「シユイさんといっしょ #02」（シユイ サポート）</h3>
             <p class="row__meta">サポートギター</p>
           </div>
         </div>
-        <div class="row reveal">
+          <div class="row reveal">
           <span class="row__date"><span class="row__type">LIVE</span></span>
           <div>
             <h3 class="t-h3">REIRIE FreeLive「JAM」（REIRIE サポート）</h3>
             <p class="row__meta">新宿歌舞伎町 ／ サポートギター</p>
           </div>
         </div>
-        <div class="row reveal">
+          <div class="row reveal">
           <span class="row__date"><span class="row__type">LIVE</span></span>
           <div>
             <h3 class="t-h3">HUG ROCK FESTIVAL（somei サポート）</h3>
             <p class="row__meta">サポートギター</p>
           </div>
         </div>
-        <div class="row reveal">
+          <div class="row reveal">
           <span class="row__date"><span class="row__type">TV</span></span>
           <div>
             <h3 class="t-h3">CDTV</h3>
             <p class="row__meta">SixTONES（ジェシー・京本大我） ／ バックで演者参加</p>
           </div>
         </div>
-        <div class="row reveal">
+          <div class="row reveal">
           <span class="row__date"><span class="row__type">TV</span></span>
           <div>
             <h3 class="t-h3">CDTV</h3>
             <p class="row__meta">川崎鷹也 ／ バックで演者参加</p>
           </div>
         </div>
-      </div>
+        </div>
+      </details>
     </div>
     <div class="live__media reveal"><img src="assets/img/live-1-1200.webp" srcset="assets/img/live-1-640.webp 640w, assets/img/live-1-1200.webp 1200w, assets/img/live-1-2000.webp 2000w" sizes="100vw" width="2000" height="1500" alt="本番前の暗いステージに置かれた機材" loading="lazy" decoding="async"></div>
-  </section>
-
-  <section class="section" id="listen">
-    <div class="container">
-      <div class="section__head">
-        <p class="t-label">Listen</p>
-        <h2 class="t-vert">試聴</h2>
-      </div>
-      <p class="listen__lead t-caption">まずはこの3曲から：FLAME ／ Memory ／ 視聴覚Fighter</p>
-      <div class="listen listen--two">
-        <div class="listen__item reveal">
-          <p class="t-label">Spotify</p>
-          <div class="embed" data-embed="https://open.spotify.com/embed/playlist/4vF3Pt0G9U2wvwlmTueu7q">
-            <a class="embed__link" href="https://open.spotify.com/playlist/4vF3Pt0G9U2wvwlmTueu7q" target="_blank" rel="noopener">
-              <span class="embed__label">プレイリストを再生</span>
-              <span class="t-caption">提供曲・参加曲をまとめて</span>
-            </a>
-          </div>
-        </div>
-        <div class="listen__item reveal">
-          <p class="t-label">YouTube</p>
-          <div class="embed">
-            <a class="embed__link" href="https://www.youtube.com/@KokiKitagawa" target="_blank" rel="noopener">
-              <span class="embed__label">チャンネルを見る</span>
-              <span class="t-caption">YouTube で開く</span>
-            </a>
-          </div>
-        </div>
-      </div>
-    </div>
   </section>
 
   <section class="section invert" id="lesson">
@@ -595,7 +600,7 @@
       </div><p class="contact__cta">
         <a class="btn" href="https://www.instagram.com/kitagawa_kouki/" target="_blank" rel="noopener">Instagram の DM へ</a>
       </p>
-      <p class="t-caption contact__ctanote">お問い合わせフォームは準備中です。それまでは DM でお受けしています。</p>
+      <p class="t-caption contact__ctanote">Instagram の DM が開きます。曲の尺と納期だけ書いていただければ返信します。（お問い合わせフォームは準備中です）</p>
       <p class="t-label contact__sub">SNS</p>
       <div class="rows">
         <div class="row reveal">
