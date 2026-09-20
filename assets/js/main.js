@@ -73,22 +73,44 @@
     btns[1].addEventListener("click", function () { rail.scrollBy({ left:  step(), behavior: reduce ? "auto" : "smooth" }); });
   });
 
-  /* 4b. 試聴の埋め込みは押されてから差し込む（初期表示を軽くする） */
-  Array.prototype.forEach.call(document.querySelectorAll("[data-embed]"), function (box) {
+  /* 4b. 試聴の埋め込みは押されてから差し込む（初期表示を軽くする）
+         ★鳴っているプレイヤーは常に1つだけ。
+           次のカードを押した瞬間に、前のカードは元のジャケットへ戻す＝音が止まる。
+           クリックは document で受ける（差し替えのたびに登録し直さないため）。 */
+  var playing = null;                                   /* { box, html, style } */
+
+  var stopPlaying = function () {
+    if (!playing) return;
+    playing.box.innerHTML = playing.html;               /* iframe を外す＝音が止まる */
+    playing.box.classList.remove("is-playing");
+    if (playing.style === null) playing.box.removeAttribute("style");
+    else playing.box.setAttribute("style", playing.style);
+    playing = null;
+  };
+
+  document.addEventListener("click", function (ev) {
+    if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return;  /* 新しいタブで開きたい人はそのまま */
+    var t = ev.target;
+    if (!t || !t.closest) return;
+    var box = t.closest("[data-embed]");
+    if (!box || box.classList.contains("is-playing")) return;
     var link = box.matches("a") ? box : box.querySelector("a");
-    if (!link) return;
-    link.addEventListener("click", function (ev) {
-      if (ev.metaKey || ev.ctrlKey || ev.shiftKey || ev.button === 1) return;  /* 新しいタブで開きたい人はそのまま */
-      ev.preventDefault();
-      var f = document.createElement("iframe");
-      f.src = box.getAttribute("data-embed");
-      f.title = box.getAttribute("aria-label") || "Spotify プレイヤー";
-      f.loading = "lazy";
-      f.allow = "encrypted-media; clipboard-write; fullscreen; picture-in-picture";
-      box.innerHTML = "";
-      box.classList.add("is-playing");
-      box.removeAttribute("style");
-      box.appendChild(f);
-    });
+    if (!link || !link.contains(t)) return;
+
+    ev.preventDefault();
+    var html  = box.innerHTML;                          /* 戻すための控え */
+    var style = box.getAttribute("style");
+    stopPlaying();                                      /* 先に前の曲を止めてから差し込む */
+
+    var f = document.createElement("iframe");
+    f.src = box.getAttribute("data-embed");
+    f.title = box.getAttribute("aria-label") || "Spotify プレイヤー";
+    f.loading = "lazy";
+    f.allow = "encrypted-media; clipboard-write; fullscreen; picture-in-picture";
+    box.innerHTML = "";
+    box.classList.add("is-playing");
+    box.removeAttribute("style");
+    box.appendChild(f);
+    playing = { box: box, html: html, style: style };
   });
 })();
