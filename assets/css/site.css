@@ -467,3 +467,72 @@ img { height: auto; }
 .split__media { grid-template-columns: repeat(3, 1fr); gap: var(--sp-3); align-content: start; }
 .split__media > .portrait { grid-column: 1 / -1; }
 .split__media > div img { width: 100%; height: clamp(120px, 18vh, 220px); object-fit: cover; }
+
+/* ------------------------------------------------------------
+   北川さんの指摘への対応（2026/9/20・v1.1）
+   1｜音が重なる      → main.js 側で「鳴るのは常に1つ」に
+   2｜おすすめの改行  → 96pxの列に入らないので料金の隣へ移し、折り返さない
+   3｜SNSをロゴに     → CC0のSimple Icons を mask で塗る（色は文字色のまま）
+   4｜ヒーローに動き  → 写真は文字の背景。読み込み後にゆっくり寄る（1回だけ）
+   色・書体・角丸・影は1つも足していない。
+   ------------------------------------------------------------ */
+
+/* 2｜「月2回 おすすめ」が左の96px列で折り返していた。おすすめは料金の隣へ */
+.plan__price { display: inline-block; white-space: nowrap; }
+.plan__rec   { margin-left: var(--sp-3); white-space: nowrap; }
+.row--rec .row__date { white-space: nowrap; }
+
+/* 3｜SNSはサービスのロゴ。mask で塗るので色はサイトの文字色のまま。
+      mask が使えない環境では IG / YT / X の文字がそのまま残る（欠けない） */
+.social a { color: var(--c-ink); }
+.social .i {
+  font-family: var(--f-en); font-size: var(--fs-caption); letter-spacing: var(--ls-label);
+}
+@supports ((mask-image: url(#a)) or (-webkit-mask-image: url(#a))) {
+  .social .i {
+    display: block; width: 20px; height: 20px;
+    overflow: hidden; white-space: nowrap; text-indent: -10em;
+    background-color: currentColor;
+    -webkit-mask: var(--icon) center / contain no-repeat;
+            mask: var(--icon) center / contain no-repeat;
+  }
+  .i--instagram { --icon: url("../img/icon-instagram.svg"); }
+  .i--youtube   { --icon: url("../img/icon-youtube.svg"); }
+  .i--x         { --icon: url("../img/icon-x.svg"); }
+}
+
+/* 4｜ヒーロー：写真は「文字の背景」。14秒かけて 1.08 → 1.00 までゆっくり寄る。
+      繰り返さない（無限ループは目が疲れる）。文字は写真の後から浮き上がる。 */
+.hero__media img {
+  transform-origin: 58% 42%;
+  animation: kk-hero-zoom 14s var(--e-out) both;
+}
+@keyframes kk-hero-zoom { from { transform: scale(1.08); } to { transform: scale(1); } }
+
+.hero__vert--main { animation: kk-hero-rise 1.1s var(--e-out) .15s both; }
+.hero__vert--sub  { animation: kk-hero-rise 1.1s var(--e-out) .45s both; }
+/* 下の帯は translateX(-50%) で中央に置いているので、動きにもそれを含める */
+.hero__bottom     { animation: kk-hero-rise-c 1.1s var(--e-out) .75s both; }
+@keyframes kk-hero-rise   { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+@keyframes kk-hero-rise-c { from { opacity: 0; transform: translateX(-50%) translateY(14px); } to { opacity: 1; transform: translateX(-50%); } }
+
+@media (prefers-reduced-motion: reduce) {
+  .hero__media img, .hero__vert--main, .hero__vert--sub, .hero__bottom { animation: none; }
+}
+
+/* 4b｜「写真は文字の背景」にする。
+   写真そのものは明るいまま（9/5に起こしたのを戻さない）。
+   文字が乗っている帯＝下3分の1と左右の端だけを濃くして、写真を背景に下げる。
+   足しているのは同じ rgba(12,18,17,…) の濃さだけで、新しい色ではない。 */
+.hero__media::after {
+  background: linear-gradient(180deg,
+    rgba(12,18,17,.46)  0%,
+    rgba(12,18,17,.06) 34%,
+    rgba(12,18,17,.52) 68%,
+    rgba(12,18,17,.90) 100%);
+}
+.hero::before {
+  background:
+    linear-gradient(90deg,  rgba(12,18,17,.80) 0%, rgba(12,18,17,.22) 17%, rgba(12,18,17,0) 30%),
+    linear-gradient(270deg, rgba(12,18,17,.72) 0%, rgba(12,18,17,.18) 14%, rgba(12,18,17,0) 26%);
+}
