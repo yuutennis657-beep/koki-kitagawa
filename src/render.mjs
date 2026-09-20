@@ -92,6 +92,11 @@ export function renderHero(p, manifest, imeta) {
   <div class="hero__copy">${main}
     <p class="hero__vert hero__vert--sub is-accent">ギタリスト／作曲・編曲</p>
     <div class="hero__bottom">${highlights}
+      <p class="hero__cta">
+        <a class="btn" href="#contact">制作のご依頼</a>
+        <a class="link hero__cta-sub" href="#works">聴いてみる &rarr;</a>
+      </p>
+      <p class="t-caption hero__ctanote">料金・納期・お受けできる内容へ。ご依頼は Instagram の DM から。</p>
       <a class="hero__scroll" href="#about"><span>Scroll</span></a>
     </div>
   </div>
@@ -109,15 +114,15 @@ export function renderAbout(p, manifest, imeta) {
     ? `\n      <p class="about__agency t-caption">${esc(ag.label)}：${ag.names.map(esc).join(" ／ ")}</p>` : "";
   const g = p.gear;
   const gear = (g && g.publish === true && known(g.groups) && g.groups.length)
-    ? `\n      <div class="gear">
-        <p class="t-label">Gear</p>
+    ? `\n      <details class="gear fold">
+        <summary class="fold__sum"><span class="t-label">Gear</span><span class="fold__hint">機材を見る</span></summary>
         <dl class="gear__list">
           ${g.groups.map(gr => `<div class="gear__group">
             <dt>${esc(gr.name)}</dt>
             <dd>${gr.items.map(esc).join("<br>")}</dd>
           </div>`).join("\n          ")}
         </dl>
-      </div>` : "";
+      </details>` : "";
   return `<section class="section" id="about">
   <div class="container">
     ${nest(4, head("About", "経歴"))}
@@ -146,7 +151,7 @@ export function renderAbout(p, manifest, imeta) {
 </section>`;
 }
 
-export function renderWorks(credits) {
+export function renderWorks(credits, profile) {
   const list = credits.filter(c => c.category === "compose" && c.featured === true).slice(0, 6);
   if (list.length === 0) throw new Error("works: featured な楽曲が1件も無い");
   const cards = list.map((c, i) => {
@@ -212,6 +217,8 @@ export function renderWorks(credits) {
       ${cards}
     </div>
     <p class="t-caption rail__note">ジャケットのあるカードは、押すとこの画面で再生できます。全${credits.filter(c => c.category === "compose").length}曲の一覧は <a href="#credits">全実績</a> に掲載しています。</p>
+${ind(4, renderListenBlock(profile))}
+    <p class="cta-quiet"><a class="link" href="#contact">この人に頼む</a></p>
   </div>
 </section>`;
 }
@@ -262,7 +269,7 @@ export function renderLive(live, media, manifest, imeta) {
     if (!known(b.year)) return -1;
     return b.year - a.year;
   });
-  const rows = all.map(it => {
+  const rowOf = (it) => {
     const label = TYPE_LABEL[it.type] || "";
     const suffix = supportSuffix(it);
     const bits = [];
@@ -278,14 +285,24 @@ export function renderLive(live, media, manifest, imeta) {
           ${lines.join("\n          ")}
         </div>
       </div>`;
-  }).join("\n      ");
+  };
+  const HEAD_N = 5;
+  const rows = all.slice(0, HEAD_N).map(rowOf).join("\n      ");
+  const rest = all.slice(HEAD_N);
+  const more = rest.length
+    ? `\n    <details class="fold">
+      <summary class="fold__sum"><span class="fold__hint">出演をすべて見る（全${all.length}件）</span></summary>
+      <div class="rows">
+        ${rest.map(rowOf).join("\n        ")}
+      </div>
+    </details>` : "";
 
   return `<section class="section" id="live">
   <div class="container">
     ${nest(4, head("Live", "出演"))}
     <div class="rows">
       ${rows}
-    </div>
+    </div>${more}
   </div>
   <div class="live__media reveal">${img("live-1", manifest, imeta)}</div>
 </section>`;
@@ -296,7 +313,7 @@ export function spotifyEmbed(url) {
   return m ? `https://open.spotify.com/embed/${m[1]}/${m[2]}` : null;
 }
 
-export function renderListen(p) {
+export function renderListenBlock(p) {
   // 代表3曲は Works で鳴らせるようになったので、ここは全曲まとめて聴ける
   // プレイリスト1本にする（同じ曲を2度出さない）
   const embed = spotifyEmbed(p.links.spotify);
@@ -322,15 +339,15 @@ export function renderListen(p) {
           </a>
         </div>
       </div>` : "";
-  return `<section class="section" id="listen">
-  <div class="container">
-    ${nest(4, head("Listen", "試聴"))}
-    ${list}
-    <div class="listen listen--two">
-      ${[spotify, youtube].filter(Boolean).join("\n      ")}
-    </div>
+  const inner = [spotify, youtube].filter(Boolean);
+  if (!inner.length) return "";
+  return `<div class="listen-block">
+  <p class="t-label listen-block__head">Listen &mdash; まとめて聴く</p>
+  ${list}
+  <div class="listen listen--two">
+    ${inner.join("\n    ")}
   </div>
-</section>`;
+</div>`;
 }
 
 export function renderLesson(p) {
@@ -340,8 +357,8 @@ export function renderLesson(p) {
     const rec = x.recommended === true ? `<span class="plan__rec">おすすめ</span>` : "";
     const note = known(x.note) ? `<span class="plan__note">${esc(x.note)}</span>` : "";
     return `<div class="row${x.recommended === true ? " row--rec" : ""}">
-        <span class="row__date">${esc(x.name)}${rec}</span>
-        <div><b class="plan__price">${esc(x.price)}</b>${note}</div>
+        <span class="row__date">${esc(x.name)}</span>
+        <div><b class="plan__price">${esc(x.price)}</b>${rec}${note}</div>
       </div>`;
   }).join("\n      ");
   const extra = [["対象", l.target], ["場所", l.place], ["お支払い", l.payment]]
@@ -454,10 +471,9 @@ export function renderPage(template, data) {
     head:    renderHead(profile, site),
     hero:    renderHero(profile, manifest, images),
     about:   renderAbout(profile, manifest, images),
-    works:   renderWorks(credits),
+    works:   renderWorks(credits, profile),
     credits: renderCredits(credits),
     live:    renderLive(live, media, manifest, images),
-    listen:  renderListen(profile),
     lesson:  renderLesson(profile),
     contact: renderContact(profile),
   };
